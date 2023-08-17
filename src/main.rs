@@ -2,7 +2,6 @@ use actix_files as fs;
 use actix_web::{web, App, HttpServer};
 use router::todo::{add_task, delete_task, index, update_task};
 use sqlx::{Pool, Postgres};
-use std::sync::Mutex;
 
 use crate::database::postgres_pool::get_postgres_pool;
 
@@ -19,7 +18,6 @@ mod utils;
 mod view;
 
 pub struct AppState {
-    pub counter: Mutex<u8>,
     pub postgres_pool: Pool<Postgres>,
 }
 
@@ -27,10 +25,7 @@ pub struct AppState {
 async fn main() -> std::io::Result<()> {
     let postgres_pool = get_postgres_pool(None).await;
 
-    let app_state = web::Data::new(AppState {
-        counter: Mutex::new(0),
-        postgres_pool,
-    });
+    let app_state = web::Data::new(AppState { postgres_pool });
 
     HttpServer::new(move || {
         App::new()
