@@ -10,8 +10,7 @@ pub fn FormCreateNewTask(cx: Scope) -> impl IntoView {
         hx-post="/task"
         hx-target="#task_list"
         hx-swap="beforeend"
-        hx-on="htmx:afterRequest: this.reset()
-               htmx:responseError: console.log('deu ruim')">
+        hx-on="htmx:afterRequest: this.reset()">
           <input id="new_task_input" class="grow pl-4" type="text" name="task" required/>
           <button class="h-8 w-8 rounded-full opacity-40 hover:opacity-100 bg-emerald-600 text-neutral-200">"✓"</button>
         </form>
