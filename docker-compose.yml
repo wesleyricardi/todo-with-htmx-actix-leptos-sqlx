@@ -1,0 +1,35 @@
+version: "3.8"
+
+volumes:
+  db_data:
+
+services:
+  database:
+    image: postgres:latest
+    container_name: postgres-todo-htmx-rust
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 123456789
+      POSTGRES_DB: todo
+    volumes:
+      - db_data:/var/lib/postgresql/data
+      - type: tmpfs
+        target: /dev/shm
+    restart: "no"
+  app:
+    build:
+      context: .
+    image: todo-with-htmx-rust:latest
+    ports:
+      - "50051:50051"
+    environment:
+      - USER=wesleyricardi
+      - POSTGRES_URL=postgres://postgres:123456789@database:5432
+      - DATABASE_URL=postgres://postgres:123456789@database:5432/todo
+    volumes:
+      - .:/app
+    working_dir: /app
+    depends_on:
+      - database
